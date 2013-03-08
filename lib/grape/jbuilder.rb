@@ -1,2 +1,7 @@
-require 'grape/jbuilder/version'
+require 'grape'
+require 'hashie/hash'
+require 'jbuilder'
+require 'tilt'
+require 'tilt/jbuilder.rb'
 require 'grape/jbuilder/formatter'
+require 'grape/jbuilder/version'
