@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tilt-jbuilder"
   spec.add_dependency "i18n"
 
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "json_expressions"
   spec.add_development_dependency "rack-test"
   spec.add_development_dependency "rake"
