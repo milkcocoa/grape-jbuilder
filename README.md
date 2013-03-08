@@ -4,7 +4,7 @@ Use [Jbuilder](https://github.com/rails/jbuilder) templates in [Grape](https://g
 
 This gem is completely based on [grape-rabl](https://github.com/LTe/grape-rabl).
 
-[![Build Status](https://secure.travis-ci.org/milkcocoa/grape-jbuilder.png)](http://travis-ci.org/milkcocoa/grape-jbuilder)
+[![Build Status](https://travis-ci.org/milkcocoa/grape-jbuilder.png?branch=master)](http://travis-ci.org/milkcocoa/grape-jbuilder)
 
 ## Installation
 
