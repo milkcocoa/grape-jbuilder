@@ -18,10 +18,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "grape", "~> 0.3"
+  spec.add_dependency "grape", ">= 0.3"
   spec.add_dependency "jbuilder"
   spec.add_dependency "tilt"
-  spec.add_dependency "tilt-jbuilder"
+  spec.add_dependency "tilt-jbuilder", ">= 0.4.0"
   spec.add_dependency "i18n"
 
   spec.add_development_dependency "bundler"
