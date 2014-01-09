@@ -19,6 +19,14 @@ describe Grape::Jbuilder do
     expect(last_response.body).to eq('"Hello World"')
   end
 
+  it 'should work with dynamically set templates' do
+    app.get('/home') { env['api.tilt.template'] = 'test' }
+
+    get '/home'
+
+    expect(last_response.body).to eq({'foo' => 'bar'}.to_json)
+  end
+
   it 'should respond with proper content-type' do
     app.get('/home', jbuilder: 'user') do
       @user    = OpenStruct.new(name: 'LTe', email: 'email@example.com')

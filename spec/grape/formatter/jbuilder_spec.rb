@@ -28,8 +28,26 @@ describe Grape::Formatter::Jbuilder do
       Grape::Formatter::Jbuilder.call object, env
     end
 
+    it "accepts templates in the env hash" do
+      env['api.tilt.template'] = 'foo'
+
+      expect(Grape::Jbuilder::Renderer).to receive(:new).with('/tmp', 'foo').
+        and_return(renderer)
+
+      Grape::Formatter::Jbuilder.call object, env
+    end
+
     it "passes the endpoint in as the render scope" do
-      expect(renderer).to receive(:render).with(endpoint).and_return('')
+      expect(renderer).to receive(:render).with(endpoint, {}).and_return('')
+
+      Grape::Formatter::Jbuilder.call object, env
+    end
+
+    it "accepts custom locals for the render call" do
+      env['api.tilt.locals'] = {:foo => :bar}
+
+      expect(renderer).to receive(:render).with(endpoint, {:foo => :bar}).
+        and_return('')
 
       Grape::Formatter::Jbuilder.call object, env
     end
