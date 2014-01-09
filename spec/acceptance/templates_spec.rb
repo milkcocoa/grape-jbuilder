@@ -15,11 +15,6 @@ describe Grape::Jbuilder do
     last_response.body.should == '"Hello World"'
   end
 
-  it 'should raise error about root directory' do
-    app.get('/home', jbuilder: true){}
-    expect { get '/home' }.to raise_error
-  end
-
   context 'tilt root is setup'  do
     before :each do
       app.before do
@@ -34,11 +29,6 @@ describe Grape::Jbuilder do
       }
       get('/home')
       last_response.headers['Content-Type'].should == 'application/json'
-    end
-
-    it 'should raise error with an invalid jbuilder value' do
-      app.get('/home', jbuilder: true){}
-      expect { get '/home' }.to raise_error
     end
 
     ['user', 'user.jbuilder'].each do |jbuilder_option|
