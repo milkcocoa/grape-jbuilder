@@ -7,50 +7,47 @@ describe Grape::Jbuilder do
     app.format :json
     app.formatter :json, Grape::Formatter::Jbuilder
     app.helpers RSpec::Mocks::ExampleMethods
+    app.before do
+      env['api.tilt.root'] = "#{File.dirname(__FILE__)}/../views"
+    end
   end
 
   it 'should work without jbuilder template' do
     app.get('/home') { 'Hello World' }
+
     get '/home'
-    last_response.body.should == '"Hello World"'
+
+    expect(last_response.body).to eq('"Hello World"')
   end
 
-  context 'tilt root is setup'  do
-    before :each do
-      app.before do
-        env['api.tilt.root'] = "#{File.dirname(__FILE__)}/../views"
+  it 'should respond with proper content-type' do
+    app.get('/home', jbuilder: 'user') {
+      @user    = double(name: 'Fred', email: 'fred@bloggs.com')
+      @project = double(name: 'JBuilder')
+    }
+    get('/home')
+    last_response.headers['Content-Type'].should == 'application/json'
+  end
+
+  ['user', 'user.jbuilder'].each do |jbuilder_option|
+    it 'should render jbuilder template (#{jbuilder_option})' do
+      app.get('/home', jbuilder: jbuilder_option) do
+        @user    = OpenStruct.new(name: 'LTe', email: 'email@example.com')
+        @project = OpenStruct.new(name: 'First')
       end
-    end
 
-    it 'should respond with proper content-type' do
-      app.get('/home', jbuilder: 'user') {
-        @user    = double(name: 'Fred', email: 'fred@bloggs.com')
-        @project = double(name: 'JBuilder')
-      }
-      get('/home')
-      last_response.headers['Content-Type'].should == 'application/json'
-    end
-
-    ['user', 'user.jbuilder'].each do |jbuilder_option|
-      it 'should render jbuilder template (#{jbuilder_option})' do
-        app.get('/home', jbuilder: jbuilder_option) do
-          @user    = OpenStruct.new(name: 'LTe', email: 'email@example.com')
-          @project = OpenStruct.new(name: 'First')
-        end
-
-        pattern = {
-          user: {
-            name: 'LTe',
-            email: 'email@example.com',
-            project: {
-              name: 'First'
-            }
+      pattern = {
+        user: {
+          name: 'LTe',
+          email: 'email@example.com',
+          project: {
+            name: 'First'
           }
         }
+      }
 
-        get '/home'
-        last_response.body.should match_json_expression(pattern)
-      end
+      get '/home'
+      last_response.body.should match_json_expression(pattern)
     end
   end
 end
