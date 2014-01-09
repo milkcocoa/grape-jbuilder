@@ -31,8 +31,9 @@ describe 'Grape::Jbuilder partials' do
     }
 
     get('/home')
-    last_response.body.should match_json_expression(pattern)
-    last_response.body.should ==
+    expect(last_response.body).to match_json_expression(pattern)
+    expect(last_response.body).to eq(
       "{\"project\":{\"name\":\"First\",\"info\":{\"type\":\"paper\"},\"author\":{\"author\":\"LTe\"}}}"
+    )
   end
 end

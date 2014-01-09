@@ -25,8 +25,10 @@ describe Grape::Jbuilder do
       @user    = double(name: 'Fred', email: 'fred@bloggs.com')
       @project = double(name: 'JBuilder')
     }
+
     get('/home')
-    last_response.headers['Content-Type'].should == 'application/json'
+
+    expect(last_response.headers['Content-Type']).to eq('application/json')
   end
 
   ['user', 'user.jbuilder'].each do |jbuilder_option|
@@ -47,7 +49,7 @@ describe Grape::Jbuilder do
       }
 
       get '/home'
-      last_response.body.should match_json_expression(pattern)
+      expect(last_response.body).to match_json_expression(pattern)
     end
   end
 end
