@@ -29,7 +29,7 @@ describe Grape::Jbuilder do
 
   context 'titl root is setup'  do
     before do
-      subject.before { env['api.tilt.root'] = "#{File.dirname(__FILE__)}/views" }
+      subject.before { env['api.tilt.root'] = "#{File.dirname(__FILE__)}/../views" }
     end
 
     it 'should respond with proper content-type' do

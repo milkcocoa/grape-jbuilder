@@ -8,7 +8,7 @@ describe 'Grape::Jbuilder partials' do
   before do
     subject.format :json
     subject.formatter :json, Grape::Formatter::Jbuilder
-    subject.before { env['api.tilt.root'] = "#{File.dirname(__FILE__)}/views" }
+    subject.before { env['api.tilt.root'] = "#{File.dirname(__FILE__)}/../views" }
   end
 
   def app
