@@ -8,6 +8,7 @@ describe Grape::Jbuilder do
   before do
     subject.format :json
     subject.formatter :json, Grape::Formatter::Jbuilder
+    subject.helpers RSpec::Mocks::ExampleMethods
   end
 
   def app
@@ -17,14 +18,12 @@ describe Grape::Jbuilder do
   it 'should work without jbuilder template' do
     subject.get('/home') { 'Hello World' }
     get '/home'
-    last_response.body.should == 'Hello World'
+    last_response.body.should == '"Hello World"'
   end
 
   it 'should raise error about root directory' do
     subject.get('/home', jbuilder: true){}
-    get '/home'
-    last_response.status.should == 500
-    last_response.body.should include "Use Rack::Config to set 'api.tilt.root' in config.ru"
+    expect { get '/home' }.to raise_error
   end
 
 
@@ -34,16 +33,17 @@ describe Grape::Jbuilder do
     end
 
     it 'should respond with proper content-type' do
-      subject.get('/home', jbuilder: 'user'){}
+      subject.get('/home', jbuilder: 'user') {
+        @user    = double(name: 'Fred', email: 'fred@bloggs.com')
+        @project = double(name: 'JBuilder')
+      }
       get('/home')
       last_response.headers['Content-Type'].should == 'application/json'
     end
 
-    it 'should not raise error about root directory' do
+    it 'should raise error with an invalid jbuilder value' do
       subject.get('/home', jbuilder: true){}
-      get '/home'
-      last_response.status.should == 500
-      last_response.body.should_not include "Use Rack::Config to set 'api.tilt.root' in config.ru"
+      expect { get '/home' }.to raise_error
     end
 
     ['user', 'user.jbuilder'].each do |jbuilder_option|
