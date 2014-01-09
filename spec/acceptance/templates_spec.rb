@@ -6,7 +6,6 @@ describe Grape::Jbuilder do
   before do
     app.format :json
     app.formatter :json, Grape::Formatter::Jbuilder
-    app.helpers RSpec::Mocks::ExampleMethods
     app.before do
       env['api.tilt.root'] = "#{File.dirname(__FILE__)}/../views"
     end
@@ -21,35 +20,35 @@ describe Grape::Jbuilder do
   end
 
   it 'should respond with proper content-type' do
-    app.get('/home', jbuilder: 'user') {
-      @user    = double(name: 'Fred', email: 'fred@bloggs.com')
-      @project = double(name: 'JBuilder')
-    }
+    app.get('/home', jbuilder: 'user') do
+      @user    = OpenStruct.new(name: 'LTe', email: 'email@example.com')
+      @project = OpenStruct.new(name: 'First')
+    end
 
     get('/home')
 
     expect(last_response.headers['Content-Type']).to eq('application/json')
   end
 
-  ['user', 'user.jbuilder'].each do |jbuilder_option|
-    it 'should render jbuilder template (#{jbuilder_option})' do
-      app.get('/home', jbuilder: jbuilder_option) do
-        @user    = OpenStruct.new(name: 'LTe', email: 'email@example.com')
-        @project = OpenStruct.new(name: 'First')
-      end
+  it "renders the template's content" do
+    app.get('/home', jbuilder: 'user') do
+      @user    = OpenStruct.new(name: 'LTe', email: 'email@example.com')
+      @project = OpenStruct.new(name: 'First')
+    end
 
-      pattern = {
-        user: {
-          name: 'LTe',
-          email: 'email@example.com',
-          project: {
-            name: 'First'
-          }
+    get('/home')
+
+    pattern = {
+      user: {
+        name: 'LTe',
+        email: 'email@example.com',
+        project: {
+          name: 'First'
         }
       }
+    }
 
-      get '/home'
-      expect(last_response.body).to match_json_expression(pattern)
-    end
+    get '/home'
+    expect(last_response.body).to match_json_expression(pattern)
   end
 end
