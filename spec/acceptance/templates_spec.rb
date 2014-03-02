@@ -55,8 +55,6 @@ describe Grape::Jbuilder do
         }
       }
     }
-
-    get '/home'
     expect(last_response.body).to match_json_expression(pattern)
   end
 end
