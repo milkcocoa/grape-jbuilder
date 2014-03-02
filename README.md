@@ -53,7 +53,7 @@ end
 Add the template name to the API options.
 
 ```ruby
-get '/user/:id', :jbuilder => 'user.jbuilder' do
+get '/user/:id', jbuilder: 'user.jbuilder' do
   @user = User.find(params[:id])
 end
 ```
@@ -65,6 +65,21 @@ json.user do
   json.(@user, :name, :email)
   json.project do
     json.(@project, :name)
+  end
+end
+```
+
+### Use Jbuilder templates dynamically
+
+```ruby
+get ':id' do
+  user = User.find_by(id: params[:id])
+  if article
+    env['api.tilt.template'] = 'users/show'
+    env['api.tilt.locals']   = {user: user}
+  else
+    status 404
+    {'status' => 'Not Found', 'errors' => "User id '#{params[:id]}' is not found."}
   end
 end
 ```
