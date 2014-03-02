@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["masushu@gmail.com"]
   spec.description   = %q{Use Jbuilder in Grape}
   spec.summary       = %q{Use Jbuilder in Grape}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/milkcocoa/grape-jbuilder"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
