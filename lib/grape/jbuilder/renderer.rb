@@ -10,8 +10,8 @@ module Grape
           raise "Use Rack::Config to set 'api.tilt.root' in config.ru"
         end
 
-        engine = ::Tilt.new file, nil, view_path: view_path
-        engine.render scope, locals
+        assigns = scope.instance_variable_names.each_with_object({}) { |name, hash| hash[name[1..-1]] = scope.instance_variable_get(name)  }
+        ApplicationController.render(file: 'api/v2/' + template, assigns: assigns)
       end
 
       private
